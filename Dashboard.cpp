@@ -98,8 +98,21 @@ int RemoveData(long long unsigned){
 }
 
 struct stud SearchData(long long unsigned search, FILE* infile){
-    struct stud s = {0, "", 0.0};
+    struct stud s = {0, "", 0.0}; // Initialize with default values
 
+    while ((getc(infile) != EOF)){
+        // moving pointer to the beginning of the file to read the data
+        fseek(infile, 0, SEEK_SET);
+        fscanf(infile, "%llu,%s,%f,\n", &s.enrNo, s.name, &s.marks);
+        if (s.enrNo == search) {
+            // moving pointer back to the end of the file to avoid reading the same data again
+            fseek(infile, 0, SEEK_END);
+            return s;
+        }
+    }
+
+    // moving pointer back to the end of the file to avoid reading the same data again
+    fseek(infile, 0, SEEK_END);
     return s;
 }
 
